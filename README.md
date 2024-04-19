@@ -11,4 +11,4 @@ How to run:
 3. Load the training data and train.
 4. Load the testing data and test :)
 
-There is na option to store a trained model and reload it for future training/testing.
+There is an option to store a trained model and reload it for future training/testing.
