@@ -76,9 +76,9 @@ public class NetworkBuilder
                 {
                     // Init random weights around the normal distribution for each perceptron and bias
                     WeightsVector = Enumerable.Repeat(0, currentLayer.Perceptrons.Length)
-                        .Select(i => new Parameter { Value = _rg.Sample(), IsOptimized = false })
+                        .Select(i => new Parameter { Value = _rg.Sample() })
                         .ToArray(),
-                    Bias = new() { Value = 0, IsOptimized = false }
+                    Bias = new() { Value = 0 }
                 })
                 .ToArray();
 
