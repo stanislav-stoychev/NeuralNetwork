@@ -1,4 +1,4 @@
-This project is a huble beginning in the ML world. It's goal was to get familiar with one of the pillars of ML which is backpropagation using gradient descend. The imposed conditions while developing it were:
+This project is a huble beginning in the ML world. It's goal was to get familiar with one of the pillars of ML which is backpropagation using gradient descend (currently it's stochastic). The imposed conditions while developing it were:
 1. No ML libraries
 2. Don't look at any type of code
 3. Only theoretical materials were allowed
