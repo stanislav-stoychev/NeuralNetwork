@@ -68,7 +68,7 @@ public class NetworkBuilder
         {
             currentLayer.NextLayer = new(layerSize)
             {
-                PrevousLayer = currentLayer
+                PreviousLayer = currentLayer
             };
 
             currentLayer.NextLayer.Perceptrons = Enumerable.Repeat(0, currentLayer.NextLayer.Perceptrons.Length)

@@ -2,7 +2,7 @@
 
 public class Layer(int size)
 {
-    public Layer? PrevousLayer { get; set; }
+    public Layer? PreviousLayer { get; set; }
 
     public Layer? NextLayer { get; set; }
 

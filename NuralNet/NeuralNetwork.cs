@@ -105,7 +105,7 @@ public class NeuralNetwork(int inputLayerSize)
         {
             foreach (var perceptron in currentLayer.Perceptrons)
             {
-                double sum = DotProduct(perceptron.WeightsVector!, currentLayer.PrevousLayer!.Perceptrons);
+                double sum = DotProduct(perceptron.WeightsVector!, currentLayer.PreviousLayer!.Perceptrons);
                 perceptron.Activation = Activation(sum + perceptron.Bias!.Value);
             }
 
@@ -130,17 +130,17 @@ public class NeuralNetwork(int inputLayerSize)
     private void GradientDescend(Layer layer, double[] gradientMultipliers)
     {
         // All gradients are calculated, adjust parameters
-        if (layer.PrevousLayer is null)
+        if (layer.PreviousLayer is null)
         {
             AdjustParameters();
             return;
         }
 
-        var nextGradientMultipliers = new double[layer.PrevousLayer.Perceptrons.Length];
+        var nextGradientMultipliers = new double[layer.PreviousLayer.Perceptrons.Length];
         for (int j = 0; j < layer.Perceptrons.Length; j++)
         {
             var perceptron = layer.Perceptrons[j];
-            var z = DotProduct(perceptron.WeightsVector!, layer.PrevousLayer.Perceptrons) + perceptron.Bias!.Value;
+            var z = DotProduct(perceptron.WeightsVector!, layer.PreviousLayer.Perceptrons) + perceptron.Bias!.Value;
             var dCdG = gradientMultipliers[j] * ActivationDerivative(z);
             // optimize each weight
             for (int i = 0; i < perceptron.WeightsVector!.Length; i++)
@@ -148,14 +148,14 @@ public class NeuralNetwork(int inputLayerSize)
                 // dz(current)/dg(prev layer) = current weight
                 nextGradientMultipliers[i] += dCdG * perceptron.WeightsVector[i].Value;
                 // dC/dw = dC/dg * dg/dz * dz/dw
-                perceptron.WeightsVector[i].TempGradient += dCdG * layer.PrevousLayer.Perceptrons[i].Activation;
+                perceptron.WeightsVector[i].TempGradient += dCdG * layer.PreviousLayer.Perceptrons[i].Activation;
             }
 
             // optimize bias
             perceptron.Bias.TempGradient += dCdG;
         }
 
-        GradientDescend(layer.PrevousLayer, nextGradientMultipliers);
+        GradientDescend(layer.PreviousLayer, nextGradientMultipliers);
     }
 
     private void AdjustParameters()

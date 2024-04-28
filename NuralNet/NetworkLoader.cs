@@ -55,7 +55,7 @@ public static class NetworkLoader
             var perc = JsonConvert.DeserializeObject<Perceptron[]>(layer)!;
             currentLayer.NextLayer = new(perc.Length)
             {
-                PrevousLayer = currentLayer,
+                PreviousLayer = currentLayer,
                 Perceptrons = perc
             };
 
