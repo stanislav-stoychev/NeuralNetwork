@@ -1,12 +1,11 @@
-﻿
+﻿namespace NN;
 
-using Newtonsoft.Json;
-
-namespace NN;
-
-public class NeuralNetwork(int inputLayerSize)
+public class NeuralNetwork(IActivation activation, ILoss loss, int inputLayerSize)
 {
-    public double LearingRate { get; set; } = 0.01;
+    private readonly IActivation _activation = activation;
+    private readonly ILoss _loss = loss;
+
+    public double LearningRate { get; set; } = 0.01;
 
     public Layer InputLayer { get; set; } = new(inputLayerSize);
 
@@ -55,34 +54,12 @@ public class NeuralNetwork(int inputLayerSize)
 
             var data = trainingData.Last();
             var totalCost = Enumerable.Range(0, OutputLayer.Perceptrons.Length)
-                .Select(i => Loss(OutputLayer.Perceptrons[i].Activation, data.result[i]))
+                .Select(i => _loss.Loss(OutputLayer.Perceptrons[i].Activation, data.result[i]))
                 .ToArray()
                 .Sum() / OutputLayer.Perceptrons.Length;
 
             Console.WriteLine($"Total cost: {totalCost} epoch: {i + 1}.");
         }
-    }
-
-    private static double Activation(double x)
-    {
-        // sigmoid
-        return 1 / (1 + Math.Exp(-x));
-    }
-
-    private static double Loss(double predicted, double expected)
-    {
-        return Math.Pow(predicted - expected, 2);
-    }
-
-    private static double LossDerivative(double predictedDer, double expectedDer, int numberOfOutputs)
-    {
-        return 2 / (double)numberOfOutputs * (predictedDer - expectedDer);
-    }
-
-    private static double ActivationDerivative(double x)
-    {
-        var activation = Activation(x);
-        return activation - Math.Pow(activation, 2);
     }
 
     private void PropagateForward(double[] input)
@@ -106,7 +83,7 @@ public class NeuralNetwork(int inputLayerSize)
             foreach (var perceptron in currentLayer.Perceptrons)
             {
                 double sum = DotProduct(perceptron.WeightsVector!, currentLayer.PreviousLayer!.Perceptrons);
-                perceptron.Activation = Activation(sum + perceptron.Bias!.Value);
+                perceptron.Activation = _activation.Activation(sum + perceptron.Bias!.Value);
             }
 
             currentLayer = currentLayer.NextLayer;
@@ -121,7 +98,7 @@ public class NeuralNetwork(int inputLayerSize)
         }
 
         var initialGradientMultipliers = Enumerable.Range(0, OutputLayer.Perceptrons.Length)
-            .Select(i => LossDerivative(OutputLayer.Perceptrons[i].Activation, expected[i], OutputLayer.Perceptrons.Length))
+            .Select(i => _loss.LossDerivative(OutputLayer.Perceptrons[i].Activation, expected[i], OutputLayer.Perceptrons.Length))
             .ToArray();
 
         GradientDescend(OutputLayer, initialGradientMultipliers);
@@ -141,7 +118,7 @@ public class NeuralNetwork(int inputLayerSize)
         {
             var perceptron = layer.Perceptrons[j];
             var z = DotProduct(perceptron.WeightsVector!, layer.PreviousLayer.Perceptrons) + perceptron.Bias!.Value;
-            var dCdG = gradientMultipliers[j] * ActivationDerivative(z);
+            var dCdG = gradientMultipliers[j] * _activation.ActivationDerivative(z);
             // optimize each weight
             for (int i = 0; i < perceptron.WeightsVector!.Length; i++)
             {
@@ -165,13 +142,13 @@ public class NeuralNetwork(int inputLayerSize)
         {
             foreach (var perceptron in layer.Perceptrons)
             {
-                var delBias = perceptron.Bias!.TempGradient * LearingRate;
+                var delBias = perceptron.Bias!.TempGradient * LearningRate;
                 perceptron.Bias.Value -= delBias;
                 perceptron.Bias.TempGradient = 0;
 
                 foreach (var weight in perceptron.WeightsVector!)
                 {
-                    var delWeight = weight.TempGradient * LearingRate;
+                    var delWeight = weight.TempGradient * LearningRate;
                     weight.Value -= delWeight;
                     weight.TempGradient = 0;
                 }

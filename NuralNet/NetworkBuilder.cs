@@ -46,13 +46,13 @@ public class NetworkBuilder
         }
     }
 
-    public NeuralNetwork BuildAndInitialize()
+    public NeuralNetwork BuildAndInitialize(IActivation activation, ILoss loss)
     {
         Validate();
 
-        var network = new NeuralNetwork(_inputSize)
+        var network = new NeuralNetwork(activation, loss, _inputSize)
         {
-            LearingRate = _learningRate,
+            LearningRate = _learningRate,
             OutputLayerSize = _outputSize
         };
 

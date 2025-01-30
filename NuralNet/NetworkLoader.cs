@@ -37,7 +37,7 @@ public static class NetworkLoader
         }
     }
 
-    public static async Task<NeuralNetwork> LoadFromFile(string fullFileName)
+    public static async Task<NeuralNetwork> LoadFromFile(string fullFileName, Func<int, NeuralNetwork> createNN)
     {
         var content = await File.ReadAllTextAsync(fullFileName);
         var layers = content.Split(LayerDeimeter)
@@ -45,7 +45,7 @@ public static class NetworkLoader
             .ToArray();
 
         var perceptrons = JsonConvert.DeserializeObject<Perceptron[]>(layers[0]);
-        var network = new NeuralNetwork(perceptrons!.Length);
+        var network = createNN(perceptrons!.Length);
 
         var currentLayer = network.InputLayer;
         currentLayer.Perceptrons = perceptrons;
