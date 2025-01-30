@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuralNet", "NuralNet\NuralNet.csproj", "{0531B292-823A-4EB0-9BDD-91E3BD3C870A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNet", "NeuralNet\NeuralNet.csproj", "{0531B292-823A-4EB0-9BDD-91E3BD3C870A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RunNetwork", "RunNetwork\RunNetwork.csproj", "{8659C497-C88B-4DFE-8E9E-36FB1687B843}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RunNetwork", "RunNetwork\RunNetwork.csproj", "{8659C497-C88B-4DFE-8E9E-36FB1687B843}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
